@@ -7,6 +7,8 @@ const {
 
 } = require('../../controllers/thoughtController');
 
+//FIXME: Need a put to update thought by id
+
 // /api/thoughts
 router.route('/').get(getThoughts).post(createThought);
 
@@ -20,5 +22,12 @@ router.route('/:thoughtId/assignments').post(addAssignment);
 
 // /api/thoughts/:thoughtId/assignments/:assignmentId
 router.route('/:thoughtId/assignments/:assignmentId').delete(removeAssignment);
+
+//FIXME: 
+// /api/thoughts/:thoughtId/reactions
+
+// POST to create a reaction stored in a single thought's reactions array field
+
+// DELETE to pull and remove a reaction by the reaction's reactionId value
 
 module.exports = router;
