@@ -3,11 +3,13 @@ const {
   getThoughts,
   getSingleThought,
   createThought,
+  updateThought,
   deleteThought,
+  addReaction,
+  deleteReaction,
 
 } = require('../../controllers/thoughtController');
 
-//FIXME: Need a put to update thought by id
 
 // /api/thoughts
 router.route('/').get(getThoughts).post(createThought);
@@ -15,19 +17,17 @@ router.route('/').get(getThoughts).post(createThought);
 // /api/thoughts/:thoughtId
 router.route('/:thoughtId').get(getSingleThought).delete(deleteThought);
 
+// /api/thoughts/:thoughtId
+router.route('/:thoughtId').get(getSingleThought).put(updateThought);
 
-//POST to create a new thought (don't forget to push the created thought's _id to the associated user's thoughts array field)
-// /api/thoughts/:thoughtId/assignments
-router.route('/:thoughtId/assignments').post(addAssignment);
 
-// /api/thoughts/:thoughtId/assignments/:assignmentId
-router.route('/:thoughtId/assignments/:assignmentId').delete(removeAssignment);
-
-//FIXME: 
+//POST to create a new reaction (don't forget to push the created reaction's _id to the associated thoughts's reactions array field)
 // /api/thoughts/:thoughtId/reactions
+router.route('/:thoughtId/reactions').post(addReaction);
 
-// POST to create a reaction stored in a single thought's reactions array field
+// /api/thoughts/:thoughtId/reactions/:reactionId
+router.route('/:thoughtId/reactions/:reactionId').delete(deleteReaction);
 
-// DELETE to pull and remove a reaction by the reaction's reactionId value
+
 
 module.exports = router;

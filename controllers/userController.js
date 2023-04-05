@@ -1,17 +1,102 @@
 // ObjectId() method for converting userId string into an ObjectId for querying database
-const { ObjectId } = require("mongoose").Types;
+//const { ObjectId } = require("mongoose").Types;
 const { User, Thought } = require("../models");
 
+// getUsers,
+  // getSingleUser,
+  // createUser,
+  // updateUser,
+  // deleteUser,
+  //may add and remove thought when create and delete thought so not needed here???
+  // addThought,
+  // removeThought,
+  // addFriend,
+  // removeFriend
 
 
-//FIXME: maybe not here but somewhere
-// var User = schemas.User;
-// User
-//  .find()
-//  .populate('friends')
-//  .exec(...)
-// You'll see that each User will have an array of Users (this user's friends).
-
-// And the correct way to insert is like Gabor said:
-
-// user.friends.push(newFriend._id);
+module.exports = {
+  getUsers(req, res) {
+    User.find()
+      .then((users) => res.json(users))
+      .catch((err) => res.status(500).json(err));
+  },
+  getSingleUser(req, res) {
+    User.findOne({ _id: req.params.userId })
+      .select("-__v")
+      .populate("thoughts")
+      .populate("friends")
+      .then((user) =>
+        !user
+          ? res.status(404).json({ message: "No user with that ID" })
+          : res.json(user)
+      )
+      .catch((err) => res.status(500).json(err));
+  },
+  // create a new user
+  createUser(req, res) {
+    User.create(req.body)
+      .then((dbUserData) => res.json(dbUserData))
+      .catch((err) => res.status(500).json(err));
+  },
+  updateUser(req, res) {
+    Video.findOneAndUpdate(
+      { _id: req.params.userId },
+      { $set: req.body },
+      { runValidators: true, new: true }
+    )
+      .then((user) =>
+        !user
+          ? res.status(404).json({ message: "No user with this id!" })
+          : res.json(user)
+      )
+      .catch((err) => {
+        console.log(err);
+        res.status(500).json(err);
+      });
+  },
+  deleteUser(req, res) {
+    User.findOneAndRemove({ _id: req.params.userId })
+//FIXME:
+    //   .then((user) =>
+    //     !user
+    //       ? res.status(404).json({ message: "No user with this id!" })
+    //       : ;//delete all thoughts for this user
+    //   )
+      .then((user) =>
+        !user
+          ? res
+              .status(404)
+              .json({ message: " but no user with this id!" })
+          : res.json({ message: " successfully deleted!" })
+      )
+      .catch((err) => res.status(500).json(err));
+  },
+  // Add a friend to the frends array
+  addfriend(req, res) {
+    User.findOneAndUpdate(
+      { _id: req.params.userId },
+      { $addToSet: { friends: req.body } },
+      { runValidators: true, new: true }
+    )
+      .then((user) =>
+        !user
+          ? res.status(404).json({ message: "No user with this id!" })
+          : res.json(user)
+      )
+      .catch((err) => res.status(500).json(err));
+  },
+  // Remove friend from friends array
+  removefriend(req, res) {
+    User.findOneAndUpdate(
+      { _id: req.params.userId },
+      { $pull: { friends: { _id: req.params.friendId } } },
+      { runValidators: true, new: true }
+    )
+      .then((user) =>
+        !user
+          ? res.status(404).json({ message: "No user with this id!" })
+          : res.json(user)
+      )
+      .catch((err) => res.status(500).json(err));
+  },
+};

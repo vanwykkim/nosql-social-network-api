@@ -5,9 +5,15 @@ const {
   createUser,
   updateUser,
   deleteUser,
+  addFriend,
+  removeFriend
+} = require("../../controllers/userController.js");
+
+//this happens in thoughts maybe?
+const {
   addThought,
   removeThought,
-} = require("../../controllers/userController.js");
+} = require("../../controllers/thoughtController.js");
 
 // /api/users
 router.route('/').get(getUsers).post(createUser);
@@ -21,13 +27,17 @@ router
 
 //FIXME: does this go here or thoughts
 //POST to create a new thought (don't forget to push the created thought's _id to the associated user's thoughts array field)
-// /api/thoughts/:thoughtId/assignments
-//router.route('/:userId/thoughts').post(addThought);
+// /api/:userId/thoughts
+router.route('/:userId/thoughts').post(addThought);
 
-//FIXME: need this route somewhere
+// /api/users/:userID/thoughts/:thoughtId
+router.route('/:userId/thoughts/:thoughtId').delete(deleteThought);
+
+
 //api/users/:userId/friends/:friendId
+router.route('/:userId/friends/:friendId').post(addFriend);
 
-// /api/thoughts/:thoughtId/assignments/:assignmentId
-router.route('/:userId/thoughts/:userId').delete(removeThought);
+// /api/users/:userId/friends/:friendId/
+router.route('/:userId/friends/:friendId').delete(removeFriend);
 
 module.exports = router;

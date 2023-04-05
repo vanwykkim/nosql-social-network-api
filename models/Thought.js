@@ -51,6 +51,30 @@ const thoughtSchema = new Schema(
   }
 );
 
+// Uses mongoose.model() to create model
 const Thought = model('thought', thoughtSchema);
+
+
+// Create a virtual property `reactionCount` that's computed from arrayLength.
+thoughtSchema.virtual('reactionCount').get(function() {
+  return this.reactions.length;
+});
+
+// // Uses model to create new instance including subdocument
+// const managerData = { name: 'Taylor', salary: 80000 };
+// const employeeData = [
+//   { name: 'Ann', salary: 40000 },
+//   { name: 'Liu', salary: 50000 },
+// ];
+
+// Department.create(
+//   { name: 'Shoes', manager: managerData, employees: employeeData },
+//   (err, data) => {
+//     if (err) {
+//       console.error(err);
+//     }
+//     console.log(data);
+//   }
+// );
 
 module.exports = Thought;
