@@ -1,5 +1,5 @@
 // ObjectId() method for converting userId string into an ObjectId for querying database
-//const { ObjectId } = require("mongoose").Types;
+const { ObjectId } = require("mongoose").Types;
 const { User, Thought } = require("../models");
 
 // getUsers,
@@ -21,10 +21,11 @@ module.exports = {
       .catch((err) => res.status(500).json(err));
   },
   getSingleUser(req, res) {
-    User.findOne({ _id: req.params.userId })
+    User.findById({ _id: req.params.userId })
+    //FIXME: need to populate thoughts and friends
       .select("-__v")
-      .populate("thoughts")
-      .populate("friends")
+      //.populate("thoughts")
+      //.populate("friends")
       .then((user) =>
         !user
           ? res.status(404).json({ message: "No user with that ID" })
@@ -35,11 +36,11 @@ module.exports = {
   // create a new user
   createUser(req, res) {
     User.create(req.body)
-      .then((dbUserData) => res.json(dbUserData))
+      .then((user) => res.json(user))
       .catch((err) => res.status(500).json(err));
   },
   updateUser(req, res) {
-    Video.findOneAndUpdate(
+    User.findOneAndUpdate(
       { _id: req.params.userId },
       { $set: req.body },
       { runValidators: true, new: true }
@@ -57,11 +58,12 @@ module.exports = {
   deleteUser(req, res) {
     User.findOneAndRemove({ _id: req.params.userId })
 //FIXME:
-    //   .then((user) =>
-    //     !user
-    //       ? res.status(404).json({ message: "No user with this id!" })
-    //       : ;//delete all thoughts for this user
-    //   )
+      .then((user) =>
+        !user
+          ? res.status(404).json({ message: "No user with this id!" })
+          : Thought.deleteMany({ _id: { $in: user.thoughts } })
+          //delete all thoughts for this user
+      )
       .then((user) =>
         !user
           ? res

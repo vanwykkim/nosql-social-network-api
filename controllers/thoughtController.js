@@ -100,7 +100,7 @@ module.exports = {
       )
       .catch((err) => res.status(500).json(err));
   },
-  // Remove video response
+  // Remove reaction
   removeReaction(req, res) {
     Thought.findOneAndUpdate(
       { _id: req.params.thoughtId },

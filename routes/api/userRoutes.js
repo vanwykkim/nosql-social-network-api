@@ -28,16 +28,16 @@ router
 //FIXME: does this go here or thoughts
 //POST to create a new thought (don't forget to push the created thought's _id to the associated user's thoughts array field)
 // /api/:userId/thoughts
-router.route('/:userId/thoughts').post(addThought);
+//router.route('/:userId/thoughts').post(addThought);
 
 // /api/users/:userID/thoughts/:thoughtId
-router.route('/:userId/thoughts/:thoughtId').delete(deleteThought);
+//router.route('/:userId/thoughts/:thoughtId').delete(deleteThought);
 
 
 //api/users/:userId/friends/:friendId
-router.route('/:userId/friends/:friendId').post(addFriend);
+//router.route('/:userId/friends/:friendId').post(addFriend);
 
 // /api/users/:userId/friends/:friendId/
-router.route('/:userId/friends/:friendId').delete(removeFriend);
+//router.route('/:userId/friends/:friendId').delete(removeFriend);
 
 module.exports = router;

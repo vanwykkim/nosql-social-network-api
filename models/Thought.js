@@ -38,8 +38,8 @@ const thoughtSchema = new Schema(
       default: Date.now(),
     },
     username: {
-    type: string,
-     requiredTrue,
+    type: String,
+     required: true,
     },
     reactions: [reactionSchema],
   },

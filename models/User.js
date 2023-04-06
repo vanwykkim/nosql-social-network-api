@@ -1,8 +1,9 @@
 const { Schema, model } = require('mongoose');
+var mongoose = require('mongoose');
 require('mongoose-type-email');
 
 // Schema to create user model
-const userSchema = new Schema(
+const userSchema = new mongoose.Schema(
   {
     username: {
       type: String,
@@ -40,7 +41,7 @@ userSchema.virtual('friendCount').get(function() {
   return this.friends.length;
 });
 
-module.exports = Student;
+module.exports = User;
 
 
 //const sara = await User.create({ userName: "sara", email: 'test@gmail.com' });
