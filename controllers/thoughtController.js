@@ -2,18 +2,12 @@
 const { ObjectId } = require("mongoose").Types;
 const { User, Thought } = require("../models");
 
-//  getThoughts,
-//   getSingleThought,
-//   createThought,
-//   updateThought,
-//   removeThought,
-//   addReaction,
-//   deleteReaction,
 
 module.exports = {
   getThoughts(req, res) {
     Thought.find()
       .then((thoughts) => res.json(thoughts))
+      .populate("reactions")
       .catch((err) => res.status(500).json(err));
   },
   getSingleThought(req, res) {
@@ -101,10 +95,10 @@ module.exports = {
       .catch((err) => res.status(500).json(err));
   },
   // Remove reaction
-  removeReaction(req, res) {
+  deleteReaction(req, res) {
     Thought.findOneAndUpdate(
       { _id: req.params.thoughtId },
-      { $pull: { reactions: { reactionId: req.params.reactionId } } },
+      { $pull: { reactions: { _id: req.params.reactionId } } },
       { runValidators: true, new: true }
     )
       .then((thought) =>
