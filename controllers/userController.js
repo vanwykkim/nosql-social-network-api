@@ -6,13 +6,15 @@ const { User, Thought } = require("../models");
 module.exports = {
   getUsers(req, res) {
     User.find()
-      .populate("thoughts")
-      .populate("friends")
+      //.populate("thoughts")
+      //.populate("friends")
       .then((users) => res.json(users))
       .catch((err) => res.status(500).json(err));
   },
   getSingleUser(req, res) {
     User.findOne({ _id: req.params.userId })
+      //.populate("thoughts")
+      //.populate("friends")
       .then((user) =>
         !user
           ? res.status(404).json({ message: "No user with that ID" })
@@ -59,10 +61,10 @@ module.exports = {
       .catch((err) => res.status(500).json(err));
   },
   // Add a friend to the frends array
-  addfriend(req, res) {
+  addFriend(req, res) {
     User.findOneAndUpdate(
       { _id: req.params.userId },
-      { $addToSet: { friends: req.body } },
+      { $addToSet: { friends: req.params.friendId } },
       { runValidators: true, new: true }
     )
       .then((user) =>
@@ -73,10 +75,10 @@ module.exports = {
       .catch((err) => res.status(500).json(err));
   },
   // Remove friend from friends array
-  removefriend(req, res) {
+  removeFriend(req, res) {
     User.findOneAndUpdate(
       { _id: req.params.userId },
-      { $pull: { friends: { _id: req.params.friendId } } },
+      { $pull: { friends: req.params.friendId } },
       { runValidators: true, new: true }
     )
       .then((user) =>
